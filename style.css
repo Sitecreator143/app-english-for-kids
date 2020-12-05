@@ -647,14 +647,43 @@ body.lock {
   background: #524e66;
 }
 
-.main__audio {
+.main__turn {
   width: 20px;
   height: 20px;
   position: absolute;
-  bottom: 15px;
+  bottom: 12px;
   left: 95px;
-  font-size: 35px;
+  font-size: 25px;
   color: white;
+}
+
+.main__play-button {
+  cursor: pointer;
+  margin: 30px 0 50px 0;
+  width: 200px;
+  height: 75px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  color: black;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 5px solid black;
+  border-radius: 20px;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+.main__play-button:hover {
+  background-color: black;
+  color: #1ca0d0;
+}
+.main__play-button:active {
+  -webkit-transform: scale(0.9, 0.9);
+      -ms-transform: scale(0.9, 0.9);
+          transform: scale(0.9, 0.9);
 }
 
 @media (max-width: 450px) {
