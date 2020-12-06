@@ -29,10 +29,11 @@ class CreateCard {
     }
     createPlayCards() {
         this.clearMainBody()
-
+        
         const playCardsCount = 8
-        let randomCardsArr = this.createRandomCardsArray()
-        const shuffledCardsArr = randomCardsArr.sort(() => Math.random() - 0.5)
+        const randomCardsArr = this.createRandomCardsArray()
+        const shuffledCardsArr = randomCardsArr.slice().sort(() => Math.random() - 0.5)
+        new StarArea()
         for (let i = 0; i < playCardsCount; i++) {
             const randomCardTheme = Math.floor((randomCardsArr[i] - 1) / 8)
             const randomCardNumber = randomCardsArr[i] % 8
@@ -40,7 +41,6 @@ class CreateCard {
         }
         new PlayButton(randomCardsArr, shuffledCardsArr)
     }
-
 }
 
 class Card {
@@ -130,8 +130,7 @@ class ThemeItem extends Card {
 }
 
 let turnCounter = 0
-let correctCardsCount = 0
-let incorrectCardsCount = 0
+let resultArray = []
 class PlayItem extends Card {
     constructor (themeNumber, cardNumber, randomCardsArr, shuffledCardsArr) {
         
@@ -142,8 +141,8 @@ class PlayItem extends Card {
         this.itemText.innerText = ''
 
         function sayNextCard() {
-            const cardTheme = Math.floor((shuffledCardsArr[turnCounter + 1] - 1) / 8)
-            const cardNumber = shuffledCardsArr[turnCounter + 1] % 8
+            const cardTheme = Math.floor((shuffledCardsArr[turnCounter] - 1) / 8)
+            const cardNumber = shuffledCardsArr[turnCounter] % 8
             setTimeout(() => {
                 const audio = new Audio()
                 audio.src = `audio/${englishCardText[cardTheme][cardNumber]}.mp3`
@@ -152,63 +151,95 @@ class PlayItem extends Card {
         }
     
         this.item.addEventListener('click', () => {
-            const isCorrectItem = themeNumber === Math.floor((randomCardsArr[turnCounter] - 1) / 8) && cardNumber === randomCardsArr[turnCounter] % 8
+            const maxTurnCount = 8
+            const isCorrectItem = themeNumber === Math.floor((shuffledCardsArr[turnCounter] - 1) / 8) && cardNumber === shuffledCardsArr[turnCounter] % 8
             if (isCorrectItem) {
-                correctCardsCount++
-                const correctAnswerAudio = new Audio()
-                correctAnswerAudio.src = `audio/correct.mp3`
-                correctAnswerAudio.autoplay = true
+                resultArray.push(1)
+                turnCounter++
+                if (turnCounter < maxTurnCount) {
+                    const correctAnswerAudio = new Audio()
+                    correctAnswerAudio.src = `audio/correct.mp3`
+                    correctAnswerAudio.autoplay = true
+                }
                 sayNextCard()
             } else {
-                incorrectCardsCount++
+                resultArray.push(0)
                 const incorrectAnswerAudio = new Audio()
                 incorrectAnswerAudio.src = `audio/error.mp3`
                 incorrectAnswerAudio.autoplay = true
                 sayNextCard()
             }
-            console.log(correctCardsCount)
-            console.log(incorrectCardsCount)
-            turnCounter++
+            new DrawStars(resultArray)
+            const isFinishWin = (turnCounter >= maxTurnCount) && (resultArray.indexOf(0) === -1)
+            const isFinishLoose = (turnCounter >= maxTurnCount) && (resultArray.indexOf(0) !== -1)
+            if (isFinishWin) {
+                console.log('win')
+                new Win(true)
+            } else if (isFinishLoose) {
+                console.log('lose')
+                new Win(false)
+                
+            }
         })
     }
 }
 class PlayButton {
     constructor (randomCardsArr, shuffledCardsArr) {
         turnCounter = 0
-        correctCardsCount = 0
-        incorrectCardsCount = 0
-        
-        this.mainBody = document.querySelector('[data-main-body]')
+        resultArray = []
 
+        this.mainBody = document.querySelector('[data-main-body]')
         const button = document.createElement('div')
         button.classList.add('main__play-button')
         button.innerText = 'Start game'
         this.mainBody.append(button)
 
-        
-        
         button.addEventListener('click', () => {
-            const maxTurnCount = 8
-            if (turnCounter < maxTurnCount) {
-                button.innerText = 'Repeat'
-                const cardTheme = Math.floor((shuffledCardsArr[turnCounter] - 1) / 8)
-                const cardNumber = shuffledCardsArr[turnCounter] % 8
+            button.innerText = 'Repeat'
+            const cardTheme = Math.floor((shuffledCardsArr[turnCounter] - 1) / 8)
+            const cardNumber = shuffledCardsArr[turnCounter] % 8
 
-                const audio = new Audio()
-                audio.src = `audio/${englishCardText[cardTheme][cardNumber]}.mp3`
-                audio.autoplay = true
-            } else if (turnCounter <= maxTurnCount) {
-                button.innerText = 'Game over'
-                setTimeout(() => {
-                    button.innerText = 'Try again'
-                }, 1000)
-                turnCounter++
-            } else {
-                new CreateCard().createPlayCards()
-            }
+            const audio = new Audio()
+            audio.src = `audio/${englishCardText[cardTheme][cardNumber]}.mp3`
+            audio.autoplay = true
         })
     }
 }
+class Win {
+    constructor(isWin) {
+        new CreateCard().clearMainBody()
+
+        this.mainBody = document.querySelector('[data-main-body]')
+        const finnishPicture = document.createElement('div')
+        if (isWin) {
+            const audio = new Audio()
+            audio.src = `audio/win.mp3`
+            audio.autoplay = true
+
+            finnishPicture.style.cssText=`
+            margin: 50px;
+            width: 210px;
+            height: 210px;
+            background: url('img/win.png') no-repeat center center/cover;`
+        } else {
+            const audio = new Audio()
+            audio.src = `audio/loose.mp3`
+            audio.autoplay = true
+
+            finnishPicture.style.cssText=`
+            margin: 50px;
+            width: 210px;
+            height: 210px;
+            background: url('img/loose.png') no-repeat center center/cover;`
+        }
+        this.mainBody.append(finnishPicture)
+        
+        setTimeout(() => {
+            new CreateCard().createCategoryCards()
+        }, 3000)
+    }
+}
+
 
 
 
