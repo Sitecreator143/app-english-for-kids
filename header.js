@@ -1,7 +1,6 @@
 /**
- * Theme number
- * Card number
- */
+ * Theme number > Card number
+*/
 const cardThemes = ['0-activities', '0-animals', '0-city', '0-clothes', '0-colors', '0-food', '0-home', '0-places']
 const englishCardText = [['1-cut', '1-drink', '1-drive', '1-eat', '1-play', '1-run', '1-sleep', '1-walk'], 
 ['2-cat', '2-dog', '2-hamster', '2-hedgehog', '2-horse', '2-koala', '2-mouse', '2-turtle'], 
@@ -24,6 +23,10 @@ class HeaderMenu {
     constructor() {
         this.header = document.querySelector('[data-header]')
         this.body = document.querySelector('body')
+        this.refreshHeader = () => {
+            this.header.innerHTML = ''
+            createHeader()
+        }
     }
     addMenu() {
         const toggleMenuClasses = () => {
@@ -31,11 +34,6 @@ class HeaderMenu {
             nav.classList.toggle('active')
             this.body.classList.toggle('lock')
             shadow.classList.toggle('active')
-        }
-
-        const refreshHeader = () => {
-            this.header.innerHTML = ''
-            createHeader()
         }
 
         const burger = document.createElement('div')
@@ -56,9 +54,8 @@ class HeaderMenu {
         const main = document.createElement('li')
         main.innerText = 'main'
         main.addEventListener('click', () => {
-            refreshHeader()
+            this.refreshHeader()
             new CreateCard().createCategoryCards()
-            toggleMenuClasses()
         })
         ul.append(main)
 
@@ -66,9 +63,8 @@ class HeaderMenu {
             const navItem = document.createElement('li')
             navItem.innerText = cardThemes[themesCount].slice(2)
             navItem.addEventListener('click', () => {
-                refreshHeader()
+                this.refreshHeader()
                 new CreateCard().createThemeCards(themesCount)
-                toggleMenuClasses()
             })
             ul.append(navItem)
         }
@@ -81,16 +77,12 @@ class HeaderMenu {
         })
     }
     addTitle() {
-        const refreshHeader = () => {
-            this.header.innerHTML = ''
-            createHeader()
-        }
         const title = document.createElement('div')
         title.innerText = 'English for kids'
         title.classList.add('header__title')
         this.header.append(title)
         title.addEventListener('click', () => {
-            refreshHeader()
+            this.refreshHeader()
             new CreateCard().createCategoryCards()
         })
     }
