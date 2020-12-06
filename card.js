@@ -149,8 +149,8 @@ class PlayItem extends Card {
                 audio.autoplay = true
             }, 1000);
         }
-    
-        this.item.addEventListener('click', () => {
+        
+        const clickItem = () => {
             const maxTurnCount = 8
             const isCorrectItem = themeNumber === Math.floor((shuffledCardsArr[turnCounter] - 1) / 8) && cardNumber === shuffledCardsArr[turnCounter] % 8
             if (isCorrectItem) {
@@ -160,8 +160,16 @@ class PlayItem extends Card {
                     const correctAnswerAudio = new Audio()
                     correctAnswerAudio.src = `audio/correct.mp3`
                     correctAnswerAudio.autoplay = true
+                    sayNextCard()
+                    this.itemImage.style.cssText=`width: 210px;
+                    height: 150px;
+                    background: url('img/correct.png') no-repeat center center/cover;`
+                    this.itemText.innerText = 'done'
                 }
-                sayNextCard()
+                setTimeout(() => {
+                    this.item.removeEventListener('click', clickItem)
+                }, 0)
+                 
             } else {
                 resultArray.push(0)
                 const incorrectAnswerAudio = new Audio()
@@ -173,14 +181,13 @@ class PlayItem extends Card {
             const isFinishWin = (turnCounter >= maxTurnCount) && (resultArray.indexOf(0) === -1)
             const isFinishLoose = (turnCounter >= maxTurnCount) && (resultArray.indexOf(0) !== -1)
             if (isFinishWin) {
-                console.log('win')
                 new Win(true)
             } else if (isFinishLoose) {
-                console.log('lose')
-                new Win(false)
-                
+                const mistakes = resultArray.filter((el) => el === 0).length
+                new Win(false, mistakes)
             }
-        })
+        }
+        this.item.addEventListener('click', clickItem)
     }
 }
 class PlayButton {
@@ -206,11 +213,12 @@ class PlayButton {
     }
 }
 class Win {
-    constructor(isWin) {
+    constructor(isWin, mistakes) {
         new CreateCard().clearMainBody()
 
         this.mainBody = document.querySelector('[data-main-body]')
         const finnishPicture = document.createElement('div')
+        const mistakesCount = document.createElement('div')
         if (isWin) {
             const audio = new Audio()
             audio.src = `audio/win.mp3`
@@ -221,6 +229,8 @@ class Win {
             width: 210px;
             height: 210px;
             background: url('img/win.png') no-repeat center center/cover;`
+
+            mistakesCount.innerText = `Victory!`
         } else {
             const audio = new Audio()
             audio.src = `audio/loose.mp3`
@@ -231,12 +241,15 @@ class Win {
             width: 210px;
             height: 210px;
             background: url('img/loose.png') no-repeat center center/cover;`
+
+            mistakesCount.innerText = `Mistakes: ${mistakes}`
         }
         this.mainBody.append(finnishPicture)
+        this.mainBody.append(mistakesCount)
         
         setTimeout(() => {
             new CreateCard().createCategoryCards()
-        }, 3000)
+        }, 300000)
     }
 }
 

@@ -5,7 +5,7 @@ class StarArea {
         this.starArea.setAttribute('data-star-area', null)
         this.starArea.style.cssText=`
         width: 100%;
-        min-height: 100px;
+        min-height: 80px;
         padding: 10px 0 10px 20px;
         display: flex;
         flex-wrap: wrap;
