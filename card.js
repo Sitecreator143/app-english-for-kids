@@ -75,6 +75,8 @@ class CategoryCard extends Card {
     constructor (themeNumber, cardNumber) {
         super(themeNumber, cardNumber)
         this.item.addEventListener('click', () => {
+            const titleName = cardThemes[this.themeNumber].slice(2)
+            new HeaderMenu().refreshHeader(titleName)
             new CreateCard().createThemeCards(this.themeNumber)
         })
     }

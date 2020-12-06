@@ -1,12 +1,10 @@
 function start() {
-    createHeader()
+    createHeader('English for kids')
     new CreateCard().createCategoryCards()
 }
 start()
-function createHeader() {
-    new HeaderMenu().addMenu()
-    new HeaderMenu().addTitle()
-    new HeaderMenu().addCheckbox()
+function createHeader(titleName) {
+    new HeaderMenu().addMenu().addTitle(titleName).addCheckbox()
 }
 
 

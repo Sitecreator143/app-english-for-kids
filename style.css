@@ -436,6 +436,7 @@ body.lock {
 
 .header__title {
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .header__burger {
