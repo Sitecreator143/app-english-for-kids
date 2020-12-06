@@ -13,34 +13,32 @@ class CreateCard {
 
     createThemeCards(themeNumber) {
         this.clearMainBody()
-        for (let cardNumber = 0; cardNumber < cardThemes.length; cardNumber++) {
+        for (let cardNumber = 0; cardNumber < englishCardText[themeNumber].length; cardNumber++) {
             new ThemeItem(themeNumber, cardNumber)
         }
     }
 
     createRandomCardsArray() {
         let randomCardsArr = []
-        const playCardsCount = 8
-        const playCardsTotal = 64
-        while (randomCardsArr.length < playCardsCount) {
-            let randomCardNumber = Math.floor(Math.random() * playCardsTotal + 1)
-            if (randomCardsArr.indexOf(randomCardNumber) === -1) { 
-                randomCardsArr.push(randomCardNumber) 
-            }
+        const themesCount = 8 
+        for (let i = 0; i < themesCount; i++) {
+            randomCardsArr.push([])
+            randomCardsArr[i].push(i)
+            randomCardsArr[i].push(Math.floor(Math.random() * (englishCardText[i].length)))
         }
+        randomCardsArr.sort(() => Math.random() - 0.5)
         return randomCardsArr
     }
 
     createPlayCards() {
         this.clearMainBody()
-        
         const playCardsCount = 8
         const randomCardsArr = this.createRandomCardsArray()
         const shuffledCardsArr = randomCardsArr.slice().sort(() => Math.random() - 0.5)
         new StarArea()
         for (let i = 0; i < playCardsCount; i++) {
-            const randomCardTheme = Math.floor((randomCardsArr[i] - 1) / playCardsCount)
-            const randomCardNumber = randomCardsArr[i] % playCardsCount
+            const randomCardTheme = randomCardsArr[i][0]
+            const randomCardNumber = randomCardsArr[i][1]
             new PlayItem(randomCardTheme, randomCardNumber, shuffledCardsArr)
         }
         new PlayButton(shuffledCardsArr)
@@ -141,8 +139,8 @@ class PlayItem extends Card {
         this.itemText.innerText = ''
 
         const sayCurrentCard = () => {
-            const cardTheme = Math.floor((shuffledCardsArr[turnCounter] - 1) / this.playCardsCount)
-            const cardNumber = shuffledCardsArr[turnCounter] % this.playCardsCount
+            const cardTheme = shuffledCardsArr[turnCounter][0]
+            const cardNumber = shuffledCardsArr[turnCounter][1]
             setTimeout(() => {
                 const audio = new Audio()
                 audio.src = `audio/${englishCardText[cardTheme][cardNumber]}.mp3`
@@ -165,9 +163,10 @@ class PlayItem extends Card {
                 this.item.removeEventListener('click', clickItem)
             }, 0)
         }
+
         const clickItem = () => {
             const maxTurnCount = 8
-            const isCorrectItem = themeNumber === Math.floor((shuffledCardsArr[turnCounter] - 1) / 8) && cardNumber === shuffledCardsArr[turnCounter] % 8
+            const isCorrectItem = themeNumber === shuffledCardsArr[turnCounter][0] && cardNumber === shuffledCardsArr[turnCounter][1]
             if (isCorrectItem) {
                 resultArray.push(1)
                 turnCounter++
@@ -212,8 +211,8 @@ class PlayButton {
 
         button.addEventListener('click', () => {
             button.innerText = 'Repeat'
-            const cardTheme = Math.floor((shuffledCardsArr[turnCounter] - 1) / playCardsCount)
-            const cardNumber = shuffledCardsArr[turnCounter] % playCardsCount
+            const cardTheme = shuffledCardsArr[turnCounter][0]
+            const cardNumber = shuffledCardsArr[turnCounter][1]
 
             const audio = new Audio()
             audio.src = `audio/${englishCardText[cardTheme][cardNumber]}.mp3`
