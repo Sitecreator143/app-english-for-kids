@@ -23,9 +23,9 @@ class HeaderMenu {
     constructor() {
         this.header = document.querySelector('[data-header]')
         this.body = document.querySelector('body')
-        this.refreshHeader = () => {
+        this.refreshHeader = (titleName) => {
             this.header.innerHTML = ''
-            createHeader()
+            createHeader(titleName)
         }
     }
     addMenu() {
@@ -63,7 +63,8 @@ class HeaderMenu {
             const navItem = document.createElement('li')
             navItem.innerText = cardThemes[themesCount].slice(2)
             navItem.addEventListener('click', () => {
-                this.refreshHeader()
+                const titleName = cardThemes[themesCount].slice(2)
+                this.refreshHeader(titleName)
                 new CreateCard().createThemeCards(themesCount)
             })
             ul.append(navItem)
@@ -75,16 +76,21 @@ class HeaderMenu {
         shadow.addEventListener('click', () => {
             toggleMenuClasses()
         })
+        return this
     }
-    addTitle() {
-        const title = document.createElement('div')
-        title.innerText = 'English for kids'
-        title.classList.add('header__title')
-        this.header.append(title)
-        title.addEventListener('click', () => {
+    addTitle(titleName = 'English for kids') {
+        this.title = document.createElement('div')
+        this.changeTitle(titleName)
+        this.title.classList.add('header__title')
+        this.header.append(this.title)
+        this.title.addEventListener('click', () => {
             this.refreshHeader()
             new CreateCard().createCategoryCards()
         })
+        return this
+    }
+    changeTitle(titleName) {
+        this.title.innerText = titleName
     }
     addCheckbox() {
         const checkbox = document.createElement('div')
@@ -99,12 +105,12 @@ class HeaderMenu {
         let isPlayMode = false
         checkbox.addEventListener('click', () => {
             if (isPlayMode) {
-                isPlayMode = false
-                checkbox.classList.remove('active')
-                checkbox.innerText = 'Train'
+                new HeaderMenu().refreshHeader()
                 new CreateCard().createCategoryCards()
             } else {
                 isPlayMode = true
+                const titleName = 'Play mode'
+                this.changeTitle(titleName)
                 checkbox.classList.add('active')
                 checkbox.innerText = 'Play!'
                 new CreateCard().createPlayCards()
