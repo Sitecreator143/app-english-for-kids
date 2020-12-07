@@ -54,6 +54,7 @@ class HeaderMenu {
         const main = document.createElement('li')
         main.innerText = 'main'
         main.addEventListener('click', () => {
+            toggleMenuClasses()
             this.refreshHeader()
             new CreateCard().createCategoryCards()
         })
@@ -63,12 +64,23 @@ class HeaderMenu {
             const navItem = document.createElement('li')
             navItem.innerText = cardThemes[themesCount].slice(2)
             navItem.addEventListener('click', () => {
+                toggleMenuClasses()
                 const titleName = cardThemes[themesCount].slice(2)
                 this.refreshHeader(titleName)
                 new CreateCard().createThemeCards(themesCount)
             })
             ul.append(navItem)
         }
+
+        const stat = document.createElement('li')
+        stat.innerText = 'stat'
+        stat.addEventListener('click', () => {
+            toggleMenuClasses()
+            const titleName = 'Statistic'
+            this.refreshHeader(titleName)
+            new CreateCard().createStatistic()
+        })
+        ul.append(stat)
 
         const shadow = document.createElement('div')
         shadow.classList.add('header__shadow')

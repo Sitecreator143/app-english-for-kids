@@ -43,6 +43,20 @@ class CreateCard {
         }
         new PlayButton(shuffledCardsArr)
     }
+
+    createStatistic() {
+        const themesCount = 8
+        this.clearMainBody()
+        new Statistic()
+        new StatisticHead(0, 0)
+        for (let i = 0; i < themesCount; i++) {
+            new Statistic()
+            new StatisticTheme(cardThemes[i].slice(2))
+            for (let j = 0; j < englishCardText[i].length; j++) {
+                new StatisticCategory(i, j)
+            }
+        }
+    }
 }
 
 class Card {
@@ -252,6 +266,65 @@ class Win {
             new HeaderMenu().refreshHeader()
             new CreateCard().createCategoryCards()
         }, 2000)
+    }
+}
+class Statistic {
+    constructor() {
+        this.mainBody = document.querySelector('[data-main-body]')
+
+        this.row = document.createElement('div')
+        this.row.style.cssText=`
+        width: 100%; 
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: 2px solid black;
+        `
+        this.mainBody.append(this.row)
+    }
+}
+class StatisticTheme extends Statistic {
+    constructor(themeText) {
+        super()
+        const theme = document.createElement('div')
+        theme.style.cssText=`
+        width: 100%; 
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;`
+        theme.innerText = themeText
+        this.row.append(theme)
+    }
+}
+class StatisticCategory extends Statistic {
+    constructor(themeNumber, CardNumber) {
+        super()
+        const wordStyle = `
+        width: 100%; 
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 50%;`
+
+        this.englishWord = document.createElement('div')
+        this.englishWord.style.cssText = wordStyle
+        this.englishWord.innerText = englishCardText[themeNumber][CardNumber].slice(2)
+        this.row.append(this.englishWord)
+
+        this.russianWord = document.createElement('div')
+        this.russianWord.style.cssText = wordStyle
+        this.russianWord.innerText = russianCardText[themeNumber][CardNumber]
+        this.row.append(this.russianWord)
+    }
+}
+class StatisticHead extends StatisticCategory {
+    constructor(themeNumber, CardNumber) {
+        super(themeNumber, CardNumber)
+        this.englishWord.innerText = 'Слово'
+        this.russianWord.innerText = 'Перевод'
     }
 }
 

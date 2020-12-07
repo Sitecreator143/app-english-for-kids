@@ -1,21 +1,9 @@
-/* * {
-    padding: 0;
-    margin: 0;
-    border: 0;
-} */
-/* *,*:before,*:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-} */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap");
 html {
-  /**Added*/
   box-sizing: border-box;
 }
 
 *, *:before, *:after {
-  /**Added*/
   box-sizing: inherit;
 }
 
@@ -27,26 +15,15 @@ a:focus, a:active {
   outline: none;
 }
 
-nav, footer, header, aside {
-  display: block;
-}
-
 html, body {
   line-height: 1.15;
-  /**Deleted from normalize*/
-  font-size: 14px;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  /**Deleted from normalize*/
 }
 
 input ::-ms-clear {
   display: none;
-}
-
-button {
-  cursor: pointer;
 }
 
 a, a:visited {
@@ -67,11 +44,6 @@ ul li {
 
 img {
   vertical-align: top;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-size: inherit;
-  font-weight: 400;
 }
 
 /* Sections
@@ -567,6 +539,10 @@ body.lock {
   border-radius: 15px;
   color: #938cb3;
   background-color: black;
+}
+.header__menu li:first-child, .header__menu li:last-child {
+  color: #006b6b;
+  font-weight: 700;
 }
 .header__menu.active {
   top: 0;
