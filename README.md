@@ -1,5 +1,9 @@
-# app-english-for-kids
-App english for kids. HTML + CSS (SCSS) + JavaScript.
+# App english for kids
+  
+Используемые технологии:  
+HTML  
+CSS(SCSS)  
+JavaScript  
 
-See app:  
+Посмотреть работу приложения:  
 https://sitecreator143.github.io/app-english-for-kids/
